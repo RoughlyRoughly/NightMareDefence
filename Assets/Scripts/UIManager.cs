@@ -19,12 +19,14 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject hpUI;
     [SerializeField] GameObject statUI;
+    [SerializeField] Text infoT;
 
     // Start is called before the first frame update
     void Start()
     {
         i = this;
         statUI = GameObject.Find("StatUI");
+        infoT = GameObject.Find("InfoText").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -56,5 +58,31 @@ public class UIManager : MonoBehaviour
         hpUI.GetComponentInChildren<Text>().text = str + _hp.ToString();
         yield return new WaitForSeconds(1);
         hpUI.GetComponentInChildren<Text>().text = "HP" + hpUI.GetComponent<Slider>().value.ToString();
+    }
+
+    public void SetStatUI(ITEM_STAT_TYPE type, string lv, int maxHp = 0)
+    {
+        string info = "";
+
+        statUI.transform.GetChild((int)type).GetComponentInChildren<Text>().text = "LV." + lv;      //StatUI 갱신
+        if (type == ITEM_STAT_TYPE.MAX_HP)
+        {
+            hpUI.GetComponent<Slider>().maxValue = maxHp;       //Hp바 갱신
+            info = "MAX HP\nLEEVEL UP";
+        }
+        else if (type == ITEM_STAT_TYPE.ATTACK) info = "ATTACK\nLEVEL UP";
+        else if (type == ITEM_STAT_TYPE.ATTACK_SPEED) info = "ASPEED\nLEVEL UP";
+        else if (type == ITEM_STAT_TYPE.CRITICAL) info = "CRITICAL\nLEVEL UP";
+        else info = "SPEED\nLEVEL UP";
+
+        StartCoroutine(Info(info));
+    }
+
+    IEnumerator Info(string _str)
+    {
+        infoT.text = _str;
+        infoT.enabled = true;
+        yield return new WaitForSeconds(1);
+        infoT.enabled = false;
     }
 }

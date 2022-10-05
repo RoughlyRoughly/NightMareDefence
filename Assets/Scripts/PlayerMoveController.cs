@@ -8,6 +8,9 @@ public class PlayerMoveController : MonoBehaviour
     Animator anit;          //애니메이터 컴포넌트 담아둘 변수
 
     [SerializeField] float speed = 4;   //케릭터 이동 속도
+    [SerializeField] float limitSpdLv = 6;
+    int spdLv = 1;
+
     Vector3 movement;                   //이동 방향 저장해둘 벡터 변수
 
     int floorMask;                      //레이어 마스크를 담아둘 변수
@@ -65,5 +68,14 @@ public class PlayerMoveController : MonoBehaviour
     {
         bool isMove = h != 0 || v != 0;
         anit.SetBool("isMove", isMove);
+    }
+
+    public void GetItemSpeed(float val)
+    {
+        if (spdLv >= limitSpdLv) return;
+        spdLv++;
+        speed += val;
+
+        UIManager.i.SetStatUI(ITEM_STAT_TYPE.SPEED, spdLv.ToString());
     }
 }

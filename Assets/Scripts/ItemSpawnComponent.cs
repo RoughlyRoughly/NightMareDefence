@@ -10,6 +10,7 @@ public class ItemSpawnComponent : MonoBehaviour
     [SerializeField] float maxZ = 0;
 
     [SerializeField] GameObject[] hpItem;   //hp아이템을 담아둘 배열
+    [SerializeField] GameObject[] statItem; //stst아이템을 담아둘 배열
 
     Vector3 pos;                        //아이템 생성 위치를 담아둘 변수
     Ray ray;                            //광선 담아둘 변수
@@ -52,13 +53,17 @@ public class ItemSpawnComponent : MonoBehaviour
     void SpawnItem()
     {
         GameObject item = null;     //선택된 아이템을 담아둘 변수
-
-        int id = 0;
+        int id = Random.Range(0,2); //아이템 타입 선택
 
         if(id == 0)
         {
             int num = Random.Range(0, hpItem.Length);       //hp배열안에 있는 아이템 중 하나 선택
             item = hpItem[num];
+        }
+        else if(id == 1)
+        {
+            int num = Random.Range(0, statItem.Length);     //stat배열 안에 있는 아이템 중 하나 선택
+            item = statItem[num];
         }
 
         Instantiate(item, SetPositon(), Quaternion.identity);   //아이템 생성

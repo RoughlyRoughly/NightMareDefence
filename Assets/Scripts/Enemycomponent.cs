@@ -31,7 +31,7 @@ public class Enemycomponent : MonoBehaviour
         Sinking();
     }
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, bool isCri = false)
     {
         if (isDead) return;
 
@@ -40,7 +40,18 @@ public class Enemycomponent : MonoBehaviour
         GameObject dText = Instantiate(dmgText, new Vector3(transform.position.x, transform.position.y + dmgTextYPos, transform.position.z),
             Quaternion.identity, transform);    //데미지 텍스트를 생성
 
-        dText.GetComponentInChildren<TextMesh>().text = "-" + dmg.ToString();
+        if (!isCri)
+        {
+            dText.GetComponentInChildren<TextMesh>().text = "-" + dmg.ToString();
+        }
+        else
+        {
+            dText.GetComponentInChildren<TextMesh>().fontSize = 70;
+            dText.GetComponentInChildren<TextMesh>().color = Color.yellow;
+            dText.GetComponentInChildren<TextMesh>().text = "CRITICAL\n-" + dmg.ToString();
+        }
+
+        
 
         Destroy(dText, 0.2f);                   //데미지 텍스트 삭제
 

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
+
 
 public class PlayerComponent : MonoBehaviour
 {
@@ -66,10 +68,12 @@ public class PlayerComponent : MonoBehaviour
         UIManager.i.PrintHpText("HP+", _hp);    //hpText 출력
     }
 
-    public void GetItemMaxHp()
+    public void GetItemMaxHp(int _val)
     {
         if (maxHpLv >= limitMaxHpLv) return;
         maxHpLv++;  //맥스 Hp 레벨 증가
-        maxHp += 20;
+        maxHp += _val;  //맥스 Hp 증가
+
+        UIManager.i.SetStatUI(ITEM_STAT_TYPE.MAX_HP, maxHpLv.ToString(),maxHp);   //UI 갱신
     }
 }

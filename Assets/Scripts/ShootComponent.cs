@@ -5,9 +5,19 @@ using UnityEngine;
 public class ShootComponent : MonoBehaviour
 {
     [SerializeField] int atk = 20;      //공격력
+    [SerializeField] int limitAtkLv = 6;
+    int atkLv = 1;
+
     [SerializeField] float atkRate = 0.2f;  //공격 딜레이
+    [SerializeField] int limitAspdLv = 6;
+    int aspdLv = 1;
+
     [SerializeField] float range = 100;      //공격 사거리
     float time = 0;        //공격 딜레이 체크할 변수
+
+    [SerializeField] float critical = 60f;    //크리티컬 확률
+    [SerializeField] int limitCriLv = 6;
+    int criLv = 1;
 
     Ray shootRay;           //발사 레이 담아둘 변수
     RaycastHit hit;         //레이에 충돌된 오브젝트를 담아둘 변수
@@ -59,8 +69,18 @@ public class ShootComponent : MonoBehaviour
 
         if(Physics.Raycast(shootRay, out hit, range,enemyLayerMask))
         {
+            int cirAtk = atk;
+            float num = Random.Range(0, 101);
+            bool isCri = false;
+
+            if(critical >= num)
+            {
+                isCri = true;
+                cirAtk = atk * Random.Range(2, 5);
+            }
+
             shootLine.SetPosition(1, hit.point);        //레이에 맞은 오브젝트 위치를 넣어줌
-            hit.transform.GetComponent<Enemycomponent>().TakeDamage(atk);   //적의 데미지 입는 함수 호출
+            hit.transform.GetComponent<Enemycomponent>().TakeDamage(cirAtk,isCri);   //적의 데미지 입는 함수 호출
         }
         else
         {
@@ -76,5 +96,32 @@ public class ShootComponent : MonoBehaviour
         shootLine.startWidth = Mathf.Lerp(shootLine.startWidth, 0, 10 * Time.deltaTime);   //슛라인의 크기를 줄여줌.
         light.intensity = Mathf.Lerp(light.intensity, 0, 10 * Time.deltaTime);             //라이트의 밝기를 줄여줌.
 
+    }
+
+    public void GetAttackItem(int val)
+    {
+        if (atkLv >= limitAtkLv) return;
+        atkLv++;
+        atk += val;
+
+        UIManager.i.SetStatUI(ITEM_STAT_TYPE.ATTACK, atkLv.ToString());
+    }
+
+    public void GetItemAttackSpeed(float val)
+    {
+        if (aspdLv >= limitAspdLv) return;
+        aspdLv++;
+        atkRate -= val;
+
+        UIManager.i.SetStatUI(ITEM_STAT_TYPE.ATTACK_SPEED, aspdLv.ToString());
+    }
+
+    public void GetItemCritical(float val)
+    {
+        if (aspdLv >= limitCriLv) return;
+        criLv++;
+        critical += val;
+
+        UIManager.i.SetStatUI(ITEM_STAT_TYPE.CRITICAL, criLv.ToString());
     }
 }
