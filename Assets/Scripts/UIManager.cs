@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject hpUI;
     [SerializeField] GameObject statUI;
     [SerializeField] Text infoT;
+    [SerializeField] GameObject slotUI;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
         i = this;
         statUI = GameObject.Find("StatUI");
         infoT = GameObject.Find("InfoText").GetComponent<Text>();
+        slotUI = GameObject.Find("ItemSlotUI");
     }
 
     // Update is called once per frame
@@ -84,5 +86,23 @@ public class UIManager : MonoBehaviour
         infoT.enabled = true;
         yield return new WaitForSeconds(1);
         infoT.enabled = false;
+    }
+
+    public void SetSlotUI(ITEM type, int idx, string str = "", Sprite img = null)
+    {
+        Text t = slotUI.transform.transform.GetChild(idx).GetComponentInChildren<Text>();
+        Image image = slotUI.transform.GetChild(idx).GetChild(0).GetComponent<Image>();
+
+        if (type == ITEM.NONE)
+        {
+            t.text = "NONE";
+            image.enabled = false;
+        }
+        else
+        {
+            t.text = str;
+            image.enabled = true;
+            image.sprite = img;
+        }
     }
 }

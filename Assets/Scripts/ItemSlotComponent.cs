@@ -32,11 +32,27 @@ public class ItemSlotComponent : MonoBehaviour
 
     void UseItem(int id)
     {
-        if (slots[id] != ITEM.NONE) return;
+        if (slots[id] == ITEM.NONE) return;
 
         if (slots[id] == ITEM.MINE)
         {
+            Instantiate(items[(int)slots[id] - 1], transform.position, Quaternion.identity);
+        }
 
+        slots[id] = ITEM.NONE;
+        UIManager.i.SetSlotUI(ITEM.NONE, id);
+    }
+
+    public void GetItem(ITEM type, string name,int imgidx)
+    {
+        for(int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == ITEM.NONE)
+            {
+                slots[i] = type;
+                UIManager.i.SetSlotUI(type, i, name, itemImg[imgidx]);
+                break;
+            }
         }
     }
 }
